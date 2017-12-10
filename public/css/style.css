@@ -13,3 +13,8 @@
 #spButton{
     transform: translate(0px, 100px);
 }
+
+#map {
+    height: 400px;
+    width: 100%;
+}

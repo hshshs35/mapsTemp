@@ -7,11 +7,11 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
-
+const axios = require('axios');
 //routes
 const idea = require('./routes/idea');
 const user = require('./routes/user');
-
+const map = require('./routes/map');
 //passport config
 require('./config/passport')(passport);
 
@@ -71,7 +71,25 @@ app.get('/about', (req, res) =>{
 
 app.use('/ideas', idea);
 
-app.use('/users', user)
+app.use('/users', user);
+
+app.use('/maps', map);
+
+
+app.get('/maps', async (req, res) =>{
+    var address = req.params.zip;
+
+    var encodedAddress = encodeURIComponent(address);
+    var geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
+
+    const response = await axios.get(geocodeUrl);
+
+    var lat = response.data.results[0].geometry.location.lat;
+    var lng = response.data.results[0].geometry.location.lng;
+
+    res.render('maps/index', {lat, lng});
+
+});
 
 
 
