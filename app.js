@@ -77,18 +77,15 @@ app.use('/maps', map);
 
 
 app.get('/maps', async (req, res) =>{
-    var address = req.params.zip;
+    var address = req.query.zip;
 
     var encodedAddress = encodeURIComponent(address);
     var geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
 
     const response = await axios.get(geocodeUrl);
-
     var lat = response.data.results[0].geometry.location.lat;
     var lng = response.data.results[0].geometry.location.lng;
-
     res.render('maps/index', {lat, lng});
-
 });
 
 
